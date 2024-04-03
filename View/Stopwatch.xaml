@@ -1,0 +1,64 @@
+﻿<Window x:Class="Stopwatch.View.Stopwatch"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewModel="clr-namespace:Stopwatch.ViewModel"
+        xmlns:converters="clr-namespace:Stopwatch.Converters"
+        mc:Ignorable="d"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        Title="Stopwatch" Height="300" Width="400">
+    <Window.DataContext>
+        <viewModel:StopwatchViewModel/>
+    </Window.DataContext>
+    <Window.Resources>
+        <converters:VisibilityConverter x:Key="VisibilityConverter"/>
+    </Window.Resources>
+    <Grid Background="Gray">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/> <!--Clock Row-->
+            <RowDefinition Height="*"/> <!--Laps Row-->
+            <RowDefinition Height="Auto"/> <!--Button Row-->
+        </Grid.RowDefinitions>
+        <materialDesign:Card Margin="30 10" Grid.Row="0">
+            <TextBlock Text="{Binding ElapsedTime}" HorizontalAlignment="Center" VerticalAlignment="Center" 
+                   FontSize="30" Foreground="White"/>
+        </materialDesign:Card>
+        <materialDesign:Card MaxWidth="110" Margin="0 10" Grid.Row="1">
+            <ListView ItemsSource="{Binding Laps}" HorizontalAlignment="Center" VerticalAlignment="Top" 
+                  Height="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" FontSize="20"
+                  Visibility="{Binding Laps.Count, Converter={StaticResource VisibilityConverter}}"/>
+        </materialDesign:Card>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom">
+            <materialDesign:Card Margin="10">
+                <StackPanel Orientation="Horizontal">
+                    <Button Style="{StaticResource MaterialDesignRaisedButton}" Command="{Binding StartCommand}" Margin="8 10 4 10">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <materialDesign:PackIcon Kind="StopwatchStart" Margin="5 0"/>
+                            <TextBlock Text="Start"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Style="{StaticResource MaterialDesignRaisedButton}" Command="{Binding StopCommand}" Margin="4 10">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <materialDesign:PackIcon Kind="StopwatchStop" Margin="5 0"/>
+                            <TextBlock Text="Stop"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Style="{StaticResource MaterialDesignRaisedButton}" Command="{Binding ResetCommand}" Margin="4 10">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <materialDesign:PackIcon Kind="StopwatchRefresh" Margin="5 0"/>
+                            <TextBlock Text="Reset"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Style="{StaticResource MaterialDesignRaisedButton}" Command="{Binding LapCommand}" IsEnabled="{Binding IsRunning, UpdateSourceTrigger=PropertyChanged}" Margin="4 10 8 10">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <materialDesign:PackIcon Kind="StopwatchMarker" Margin="5 0"/>
+                            <TextBlock Text="Lap"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </materialDesign:Card>
+        </StackPanel>
+    </Grid>
+</Window>
+
